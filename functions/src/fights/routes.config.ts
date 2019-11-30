@@ -1,157 +1,28 @@
-import functions = require("firebase-functions");
 import {Application} from "express";
-import {Request, Response} from "firebase-functions";
-import DocumentSnapshot = FirebaseFirestore.DocumentSnapshot;
-import DocumentReference = FirebaseFirestore.DocumentReference;
-import QuerySnapshot = FirebaseFirestore.QuerySnapshot;
-import DocumentData = FirebaseFirestore.DocumentData;
-import QueryDocumentSnapshot = FirebaseFirestore.QueryDocumentSnapshot;
-import * as admin from "firebase-admin";
-import Firestore = FirebaseFirestore.Firestore;
-
-admin.initializeApp(functions.config().firebase);
-const db: Firestore = admin.firestore();
+import * as fightsController from "./controllers/fights.conroller";
 
 export const fightsRoutesConfig = (app: Application) => {
-    app.post('/fights', async (request: Request, response: Response) => {
-        try {
-            const {winner, loser, title} = request.body;
+    app.post('/fights', [
+        fightsController.create
+    ]);
 
-            const data = {
-                winner,
-                loser,
-                title
-            };
+    app.get('/fights', [
+        fightsController.getFights
+    ]);
 
-            const fightRef: DocumentReference = await db.collection('fights').add(data);
-            const fightSnapshot: DocumentSnapshot = await fightRef.get();
+    app.get('/fights/:id', [
+        fightsController.getFight
+    ]);
 
-            response.status(201).send({
-                id: fightSnapshot.id,
-                data: fightSnapshot.data()
-            });
-        } catch (error) {
+    app.patch('/fights/:id', [
+        fightsController.patchFight
+    ]);
 
-            response.status(500).send(error);
-        }
-    });
+    app.put('/fights/:id', [
+        fightsController.putFight
+    ]);
 
-// const myHandler = (collection: string, param: string) => {
-//     return async (request: Request, response: Response, next: NextFunction) => {
-//         const doc = await db.collection(collection).doc(request.params[param]).get();
-//         if (doc.exists) {
-//             next();
-//         } else {
-//             response.status(500).send('The requested document does not exist!');
-//         }
-//     };
-// };
-
-    app.get('/fights/:id', async (request: Request, response: Response) => {
-        try {
-            const fightId: string = request.params.id;
-
-            const fightSnapshot: DocumentSnapshot = await db.collection('fights').doc(fightId).get();
-
-            if (fightSnapshot.exists) {
-
-                response.status(200).send({
-                    ...fightSnapshot.data(),
-                    id: fightSnapshot.id
-                });
-            } else {
-
-                response.status(404).send('The fight does not exists');
-            }
-
-        } catch (error) {
-
-            response.status(500).send(error);
-        }
-    });
-
-    app.get('/fights', async (request: Request, response: Response) => {
-        try {
-
-            const fightsQuerySnapshot: QuerySnapshot = await db.collection('fights').get();
-            const fights: DocumentData[] = fightsQuerySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
-                ...doc.data(),
-                id: doc.id
-            }));
-
-            response.status(200).send(fights);
-        } catch (error) {
-
-            response.status(500).send(error);
-        }
-    });
-
-    app.patch('/fights/:id', async (request: Request, response: Response) => {
-        try {
-            const fightId: string = request.params.id;
-
-            const fightRef: DocumentReference = db.collection('fights').doc(fightId);
-            await fightRef.update(request.body);
-            // update vs set? set creates a new document if the provided id does not exist also
-            // it completely replaces the document if we don't use { merge: true } as the option.
-            // update returns an error if the provided id doesn't exist and it doesn't replace the entire document.
-
-            const updatedFightSnapshot: DocumentSnapshot = await fightRef.get();
-            response.status(200).send({
-                ...updatedFightSnapshot.data(),
-                id: updatedFightSnapshot.id
-            });
-        } catch (error) {
-
-            response.status(500).send(error);
-        }
-    });
-
-    app.put('/fights/:id', async (request: Request, response: Response) => {
-        try {
-            const fightId: string = request.params.id;
-
-            const fightRef: DocumentReference = db.collection('fights').doc(fightId);
-            const fightSnapshot: DocumentSnapshot = await fightRef.get();
-
-            if (fightSnapshot.exists) {
-
-                await fightRef.set(request.body);
-                const updatedFightSnapshot: DocumentSnapshot = await fightRef.get();
-                response.status(200).send({
-                    ...updatedFightSnapshot.data(),
-                    id: updatedFightSnapshot.id
-                });
-            } else {
-
-                response.status(404).send('The requested fight does not exist.');
-            }
-
-        } catch (error) {
-
-            response.status(500).send(error);
-        }
-    });
-
-    app.delete('/fights/:id', async (request: Request, response: Response) => {
-        try {
-            const fightId: string = request.params.id;
-
-            const fightRef: DocumentReference = db.collection('fights').doc(fightId);
-            const fightSnapshot: DocumentSnapshot = await fightRef.get();
-
-            if (fightSnapshot.exists) {
-
-                await fightRef.delete();
-                response.status(201).send('Fight was successfully deleted.');
-            } else {
-
-                response.status(404).send('The requested document does not exist.');
-            }
-
-        } catch (error) {
-
-            response.status(500).send(error);
-        }
-    });
+    app.delete('/fights/:id', [
+        fightsController.deleteFight
+    ]);
 };
