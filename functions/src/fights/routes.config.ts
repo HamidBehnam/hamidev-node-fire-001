@@ -3,7 +3,7 @@ import * as fightsController from "./controllers/fights.conroller";
 
 export const fightsRoutesConfig = (app: Application) => {
     app.post('/fights', [
-        fightsController.create
+        fightsController.addFight
     ]);
 
     app.get('/fights', [
