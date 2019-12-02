@@ -20,7 +20,8 @@ const schemas = {
             "loser": { "type": "string" },
             "title": { "type": "string" }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "minProperties": 1
     }
 };
 
