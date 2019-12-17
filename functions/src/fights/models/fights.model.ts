@@ -1,13 +1,8 @@
 import DocumentReference = FirebaseFirestore.DocumentReference;
 import DocumentSnapshot = FirebaseFirestore.DocumentSnapshot;
-import * as admin from "firebase-admin";
-import Firestore = FirebaseFirestore.Firestore;
-import functions = require("firebase-functions");
 import QueryDocumentSnapshot = FirebaseFirestore.QueryDocumentSnapshot;
 import QuerySnapshot = FirebaseFirestore.QuerySnapshot;
-
-admin.initializeApp(functions.config().firebase);
-const db: Firestore = admin.firestore();
+import { db } from '../../common/firebase.service';
 
 export const addFight = async (data: any) => {
     const fightRef: DocumentReference = await db.collection('fights').add(data);
