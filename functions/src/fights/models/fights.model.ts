@@ -2,7 +2,7 @@ import DocumentReference = FirebaseFirestore.DocumentReference;
 import DocumentSnapshot = FirebaseFirestore.DocumentSnapshot;
 import QueryDocumentSnapshot = FirebaseFirestore.QueryDocumentSnapshot;
 import QuerySnapshot = FirebaseFirestore.QuerySnapshot;
-import {db} from '../../common/firebase.service';
+import {db} from '../../common/services/firebase.service';
 
 export const addFight = async (data: any) => {
     const fightRef: DocumentReference = await db.collection('fights').add(data);

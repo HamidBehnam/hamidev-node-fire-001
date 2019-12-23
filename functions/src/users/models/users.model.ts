@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import UserRecord = admin.auth.UserRecord;
-import {auth} from "../../common/firebase.service";
+import {auth} from "../../common/services/firebase.service";
 import ListUsersResult = admin.auth.ListUsersResult;
 
 export const createUser = async (data: any) => {

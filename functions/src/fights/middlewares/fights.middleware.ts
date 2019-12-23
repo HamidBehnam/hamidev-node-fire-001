@@ -1,8 +1,6 @@
-import * as Ajv from "ajv";
 import {Request, Response} from "firebase-functions";
 import {NextFunction} from "express";
-
-const ajv = new Ajv();
+import {validator} from "../../common/services/validator.service";
 
 const schemas = {
     "full": {
@@ -25,25 +23,28 @@ const schemas = {
     }
 };
 
-const validator = (request: Request, response: Response, next: NextFunction, schema: any, data: any) => {
+export const fullValidation = (request: Request, response: Response, next: NextFunction) => {
 
-    const valid = ajv.validate(schema, data);
+    const validationResult = validator(schemas.full, request.body);
 
-    if (valid) {
+    if (validationResult.valid) {
 
         next();
     } else {
 
-        response.status(400).send(ajv.errors);
+        response.status(400).send(validationResult.errors);
     }
-};
-
-export const fullValidation = (request: Request, response: Response, next: NextFunction) => {
-
-    validator(request, response, next, schemas.full, request.body);
 };
 
 export const partialValidation = (request: Request, response: Response, next: NextFunction) => {
 
-    validator(request, response, next, schemas.partial, request.body);
+    const validationResult = validator(schemas.partial, request.body);
+
+    if (validationResult.valid) {
+
+        next();
+    } else {
+
+        response.status(400).send(validationResult.errors);
+    }
 };
