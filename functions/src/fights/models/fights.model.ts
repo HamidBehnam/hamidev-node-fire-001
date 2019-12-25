@@ -64,7 +64,10 @@ export const putFight = async (fightId: string, fightData: any) => {
         };
     } else {
 
-        return null;
+        throw {
+            code: 'fights/fight-does-not-exist',
+            message: 'The requested fight does not exist.'
+        };
     }
 };
 

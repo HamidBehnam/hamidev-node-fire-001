@@ -22,3 +22,15 @@ export const listUsers = async (request: Request, response: Response) => {
         response.status(500).send(error);
     }
 };
+
+export const signin = async (request: Request, response: Response) => {
+    try {
+
+        const authenticationResult = await usersModel.signin(request.body);
+
+        response.status(200).send(authenticationResult);
+    } catch (error) {
+
+        response.status(500).send(error);
+    }
+};

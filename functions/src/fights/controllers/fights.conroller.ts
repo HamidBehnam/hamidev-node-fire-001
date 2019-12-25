@@ -56,14 +56,7 @@ export const putFight = async (request: Request, response: Response) => {
     try {
 
         const updatedFight = await fightsModel.putFight(request.params.id, request.body);
-
-        if (updatedFight) {
-
-            response.status(200).send(updatedFight);
-        } else {
-
-            response.status(404).send('The requested fight does not exist.');
-        }
+        response.status(200).send(updatedFight);
     } catch (error) {
 
         response.status(500).send(error);

@@ -1,9 +1,7 @@
 import {Request, Response} from "firebase-functions";
 import {NextFunction} from "express";
 import {validator} from "../services/validator.service";
-import * as firebaseClient from "firebase";
-import UserCredential = firebaseClient.auth.UserCredential;
-import {adminAuth, clientAuth} from "../services/firebase.service";
+import {adminAuth} from "../services/firebase.service";
 
 const schema = {
     "properties": {
@@ -16,7 +14,7 @@ const schema = {
     "required": [ "authorization" ]
 };
 
-export const checkIfAuthenticated = (request: Request, response: Response, next: NextFunction) => {
+export const checkIfAuthenticated = async (request: Request, response: Response, next: NextFunction) => {
 
     const validationResult = validator(schema, request.headers);
 
@@ -26,22 +24,12 @@ export const checkIfAuthenticated = (request: Request, response: Response, next:
 
             const token = request.headers.authorization.split(' ')[1];
 
-            if (token === 'hamid') {
+            try {
 
-                clientAuth.signInWithEmailAndPassword('sdf6@sdf6.com', 'forthis').then((user: UserCredential) => {
-                    if (user && user.user) {
-                        user.user.getIdToken(true).then(async (token2) => {
-
-                            const theObtainedUser = await adminAuth.verifyIdToken(token2);
-
-                            response.locals.user = theObtainedUser;
-                            console.log(theObtainedUser);
-                        });
-                    }
-                });
+                response.locals.user = await adminAuth.verifyIdToken(token);
 
                 next();
-            } else {
+            } catch (error) {
 
                 response.status(403).send();
             }
