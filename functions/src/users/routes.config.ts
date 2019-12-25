@@ -24,4 +24,11 @@ export const usersRoutesConfig = (app: Application) => {
         commonMiddleware.checkIfAuthenticated,
         usersController.signout
     ]);
+
+    app.post('/access', [
+        commonMiddleware.authValidation,
+        commonMiddleware.checkIfAuthenticated,
+        usersMiddleware.accessValidation,
+        usersController.access
+    ]);
 };

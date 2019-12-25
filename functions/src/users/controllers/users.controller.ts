@@ -46,3 +46,18 @@ export const signout = async (request: Request, response: Response) => {
         response.status(500).send(error);
     }
 };
+
+export const access = async (request: Request, response: Response) => {
+
+    try {
+
+        await usersModel.access(response.locals.user, request.body);
+
+        await usersModel.signout(request.body.uid);
+
+        response.status(201).send();
+    } catch (error) {
+
+        response.status(500).send(error);
+    }
+};
