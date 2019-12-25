@@ -9,6 +9,7 @@ export const usersRoutesConfig = (app: Application) => {
     ]);
 
     app.get('/users', [
+        commonMiddleware.authValidation,
         commonMiddleware.checkIfAuthenticated,
         usersController.listUsers
     ]);
@@ -16,5 +17,11 @@ export const usersRoutesConfig = (app: Application) => {
     app.post('/login', [
         usersMiddleware.loginValidation,
         usersController.signin
+    ]);
+
+    app.post('/logout', [
+        commonMiddleware.authValidation,
+        commonMiddleware.checkIfAuthenticated,
+        usersController.signout
     ]);
 };

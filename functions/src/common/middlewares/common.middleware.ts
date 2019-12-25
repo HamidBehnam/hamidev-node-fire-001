@@ -14,29 +14,33 @@ const schema = {
     "required": [ "authorization" ]
 };
 
-export const checkIfAuthenticated = async (request: Request, response: Response, next: NextFunction) => {
+export const authValidation = (request: Request, response: Response, next: NextFunction) => {
 
     const validationResult = validator(schema, request.headers);
 
     if (validationResult.valid) {
 
-        if (request.headers.authorization) {
-
-            const token = request.headers.authorization.split(' ')[1];
-
-            try {
-
-                response.locals.user = await adminAuth.verifyIdToken(token);
-
-                next();
-            } catch (error) {
-
-                response.status(403).send();
-            }
-        }
+        next();
     } else {
 
         response.status(400).send(validationResult.errors);
     }
+};
 
+export const checkIfAuthenticated = async (request: Request, response: Response, next: NextFunction) => {
+
+    if (request.headers.authorization) {
+
+        const token = request.headers.authorization.split(' ')[1];
+
+        try {
+
+            response.locals.user = await adminAuth.verifyIdToken(token, true);
+
+            next();
+        } catch (error) {
+
+            response.status(403).send();
+        }
+    }
 };

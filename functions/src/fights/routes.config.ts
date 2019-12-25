@@ -15,6 +15,7 @@ export const fightsRoutesConfig = (app: Application) => {
     ]);
 
     app.get('/fights/:id', [
+        commonMiddleware.authValidation,
         commonMiddleware.checkIfAuthenticated,
         fightsController.getFight
     ]);

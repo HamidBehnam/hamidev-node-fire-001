@@ -37,3 +37,9 @@ export const signin = (data: any) => {
         };
     });
 };
+
+export const signout = (uid: string) => {
+
+    return adminAuth.revokeRefreshTokens(uid);
+};
+

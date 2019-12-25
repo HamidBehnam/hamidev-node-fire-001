@@ -34,3 +34,15 @@ export const signin = async (request: Request, response: Response) => {
         response.status(500).send(error);
     }
 };
+
+export const signout = async (request: Request, response: Response) => {
+    try {
+
+        await usersModel.signout(response.locals.user.uid);
+
+        response.status(201).send();
+    } catch (error) {
+
+        response.status(500).send(error);
+    }
+};
