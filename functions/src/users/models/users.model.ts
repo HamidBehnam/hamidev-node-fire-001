@@ -25,7 +25,7 @@ export const listUsers = async () => {
     };
 };
 
-export const signin = (data: any) => {
+export const signIn = (data: any) => {
 
     return clientAuth.signInWithEmailAndPassword(data.email, data.password).then((user: UserCredential) => {
         if (user && user.user) {
@@ -40,21 +40,21 @@ export const signin = (data: any) => {
     });
 };
 
-export const signout = (uid: string) => {
+export const signOut = (uid: string) => {
 
     return adminAuth.revokeRefreshTokens(uid);
 };
 
 export const access = (currentUser: DecodedIdToken, claimData: any) => {
 
-    if (currentUser.admin && currentUser.uid !== claimData.uid) {
+    if (currentUser.uid !== claimData.uid) {
 
         return adminAuth.setCustomUserClaims(claimData.uid, claimData.access);
     } else {
 
         throw {
             code: 'access/cannot-change-access',
-            message: `Potential reasons: - not being admin - trying to change your own access.`
+            message: `Potential reason: - trying to change your own access.`
         };
     }
 };

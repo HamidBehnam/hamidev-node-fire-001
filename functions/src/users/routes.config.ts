@@ -10,25 +10,26 @@ export const usersRoutesConfig = (app: Application) => {
 
     app.get('/users', [
         commonMiddleware.authValidation,
-        commonMiddleware.checkIfAuthenticated,
+        commonMiddleware.isAuthenticated,
         usersController.listUsers
     ]);
 
     app.post('/login', [
-        usersMiddleware.loginValidation,
-        usersController.signin
+        usersMiddleware.signInValidation,
+        usersController.signIn
     ]);
 
     app.post('/logout', [
         commonMiddleware.authValidation,
-        commonMiddleware.checkIfAuthenticated,
-        usersController.signout
+        commonMiddleware.isAuthenticated,
+        usersController.signOut
     ]);
 
     app.post('/access', [
         commonMiddleware.authValidation,
-        commonMiddleware.checkIfAuthenticated,
+        commonMiddleware.isAuthenticated,
         usersMiddleware.accessValidation,
+        commonMiddleware.isAuthorized(['admin']),
         usersController.access
     ]);
 };

@@ -27,7 +27,7 @@ export const authValidation = (request: Request, response: Response, next: NextF
     }
 };
 
-export const checkIfAuthenticated = async (request: Request, response: Response, next: NextFunction) => {
+export const isAuthenticated = async (request: Request, response: Response, next: NextFunction) => {
 
     if (request.headers.authorization) {
 
@@ -43,4 +43,20 @@ export const checkIfAuthenticated = async (request: Request, response: Response,
             response.status(403).send();
         }
     }
+};
+
+export const isAuthorized = (acceptedRoles: string[]) => {
+    return (request: Request, response: Response, next: NextFunction) => {
+
+        let authorized = false;
+
+        for (const role of acceptedRoles) {
+            if (response.locals.user[role]) {
+                authorized = true;
+                break;
+            }
+        }
+
+        authorized ? next() : response.status(403).send();
+    };
 };

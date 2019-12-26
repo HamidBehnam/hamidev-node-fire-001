@@ -80,14 +80,3 @@ export const deleteFight = async (request: Request, response: Response) => {
         response.status(500).send(error);
     }
 };
-
-// const myHandler = (collection: string, param: string) => {
-//     return async (request: Request, response: Response, next: NextFunction) => {
-//         const doc = await db.collection(collection).doc(request.params[param]).get();
-//         if (doc.exists) {
-//             next();
-//         } else {
-//             response.status(500).send('The requested document does not exist!');
-//         }
-//     };
-// };

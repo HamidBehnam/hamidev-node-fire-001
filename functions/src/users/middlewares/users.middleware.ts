@@ -27,7 +27,7 @@ const schemas = {
     }
 };
 
-export const loginValidation = (request: Request, response: Response, next: NextFunction) => {
+export const signInValidation = (request: Request, response: Response, next: NextFunction) => {
 
     const validationResult = validator(schemas.login, request.body);
 

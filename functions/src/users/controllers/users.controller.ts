@@ -23,10 +23,10 @@ export const listUsers = async (request: Request, response: Response) => {
     }
 };
 
-export const signin = async (request: Request, response: Response) => {
+export const signIn = async (request: Request, response: Response) => {
     try {
 
-        const authenticationResult = await usersModel.signin(request.body);
+        const authenticationResult = await usersModel.signIn(request.body);
 
         response.status(200).send(authenticationResult);
     } catch (error) {
@@ -35,10 +35,10 @@ export const signin = async (request: Request, response: Response) => {
     }
 };
 
-export const signout = async (request: Request, response: Response) => {
+export const signOut = async (request: Request, response: Response) => {
     try {
 
-        await usersModel.signout(response.locals.user.uid);
+        await usersModel.signOut(response.locals.user.uid);
 
         response.status(201).send();
     } catch (error) {
@@ -53,7 +53,7 @@ export const access = async (request: Request, response: Response) => {
 
         await usersModel.access(response.locals.user, request.body);
 
-        await usersModel.signout(request.body.uid);
+        await usersModel.signOut(request.body.uid);
 
         response.status(201).send();
     } catch (error) {
