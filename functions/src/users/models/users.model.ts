@@ -2,10 +2,9 @@ import * as firebaseAdmin from "firebase-admin";
 import * as firebaseClient from "firebase";
 import UserRecord = firebaseAdmin.auth.UserRecord;
 import ListUsersResult = firebaseAdmin.auth.ListUsersResult;
+import DecodedIdToken = firebaseAdmin.auth.DecodedIdToken;
 import UserCredential = firebaseClient.auth.UserCredential;
 import {adminAuth, clientAuth} from "../../common/services/firebase.service";
-import * as admin from "firebase-admin";
-import DecodedIdToken = admin.auth.DecodedIdToken;
 
 export const createUser = async (data: any) => {
     const user: UserRecord = await adminAuth.createUser(data);
