@@ -9,8 +9,8 @@ export const usersRoutesConfig = (app: Application) => {
     ]);
 
     app.get('/users', [
-        commonMiddleware.authValidation,
-        commonMiddleware.isAuthenticated,
+        // commonMiddleware.authValidation,
+        // commonMiddleware.isAuthenticated,
         usersController.listUsers
     ]);
 
