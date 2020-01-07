@@ -16,6 +16,17 @@ export const addFight = async (data: any) => {
 
 export const getFights = async () => {
 
+    //TODO: Remove this comment block later
+
+    // const innerFightRef: DocumentReference = await db.collection('fights').doc().collection('hjhjhjhjh').add({
+    //     name: 'something else',
+    //     code: 'SDF345'
+    // });
+    //
+    // const innerFightSnapshot: DocumentSnapshot = await innerFightRef.get();
+    //
+    // console.log(innerFightSnapshot.data());
+
     const fightsQuerySnapshot: QuerySnapshot = await db.collection('fights').get();
     return fightsQuerySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
         ...doc.data(),

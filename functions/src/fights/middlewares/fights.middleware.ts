@@ -7,7 +7,19 @@ const schemas = {
         "properties": {
             "winner": { "type": "string" },
             "loser": { "type": "string" },
-            "title": { "type": "string" }
+            "title": { "type": "string" },
+            "locations": {
+                "type": "array",
+                "items": {
+                    "properties": {
+                        "name": { "type": "string" },
+                        "code": { "type": "number" }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "name", "code" ],
+                },
+                "minItems": 1
+            }
         },
         "additionalProperties": false,
         "required": [ "winner", "loser", "title" ]
