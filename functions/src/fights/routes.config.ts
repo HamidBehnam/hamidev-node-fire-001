@@ -1,32 +1,39 @@
 import {Application} from "express";
 import * as fightsController from "./controllers/fights.conroller";
-import * as fightsMiddleware from "./middlewares/fights.middleware";
-// import * as commonMiddleware from "../common/middlewares/common.middleware";
+import {fightsSchemas} from "./services/schemas.service";
+import * as commonMiddleware from "../common/middlewares/common.middleware";
+import {commonSchemas} from "../common/services/schemas.service";
+import {ValidationDataSource} from "../common/services/constants.service";
 
 
 export const fightsRoutesConfig = (app: Application) => {
     app.post('/fights', [
-        fightsMiddleware.fullValidation,
+        commonMiddleware.validator(fightsSchemas.fight.full),
         fightsController.addFight
     ]);
 
+    app.post('/fights/:id/locations', [
+
+    ]);
+
     app.get('/fights', [
+        commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
         fightsController.getFights
     ]);
 
     app.get('/fights/:id', [
-        // commonMiddleware.authValidation,
+        // commonMiddleware.validator(commonSchemas.auth),
         // commonMiddleware.isAuthenticated,
         fightsController.getFight
     ]);
 
     app.patch('/fights/:id', [
-        fightsMiddleware.partialValidation,
+        commonMiddleware.validator(fightsSchemas.fight.partial),
         fightsController.patchFight
     ]);
 
     app.put('/fights/:id', [
-        fightsMiddleware.fullValidation,
+        commonMiddleware.validator(fightsSchemas.fight.full),
         fightsController.putFight
     ]);
 

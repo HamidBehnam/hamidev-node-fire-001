@@ -1,7 +1,9 @@
 import {Application} from "express";
 import * as usersController from './controllers/users.controller';
 import * as commonMiddleware from '../common/middlewares/common.middleware';
-import * as usersMiddleware from '../users/middlewares/users.middleware';
+import {usersSchemas} from "./services/schemas.service";
+import {commonSchemas} from "../common/services/schemas.service";
+import {ValidationDataSource} from "../common/services/constants.service";
 
 export const usersRoutesConfig = (app: Application) => {
     app.post('/users', [
@@ -9,26 +11,26 @@ export const usersRoutesConfig = (app: Application) => {
     ]);
 
     app.get('/users', [
-        // commonMiddleware.authValidation,
+        // commonMiddleware.validator(commonSchemas.auth),
         // commonMiddleware.isAuthenticated,
         usersController.listUsers
     ]);
 
     app.post('/login', [
-        usersMiddleware.signInValidation,
+        commonMiddleware.validator(usersSchemas.login),
         usersController.signIn
     ]);
 
     app.post('/logout', [
-        commonMiddleware.authValidation,
+        commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
         commonMiddleware.isAuthenticated,
         usersController.signOut
     ]);
 
     app.post('/access', [
-        commonMiddleware.authValidation,
+        commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
         commonMiddleware.isAuthenticated,
-        usersMiddleware.accessValidation,
+        commonMiddleware.validator(usersSchemas.access),
         commonMiddleware.isAuthorized(['admin']),
         usersController.access
     ]);

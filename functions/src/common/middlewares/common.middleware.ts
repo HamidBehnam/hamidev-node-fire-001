@@ -1,30 +1,36 @@
 import {Request, Response} from "firebase-functions";
 import {NextFunction} from "express";
-import {validator} from "../services/validator.service";
+import {validate} from "../services/validate.service";
 import {adminAuth} from "../services/firebase.service";
+import {ValidationDataSource} from "../services/constants.service";
 
-const schema = {
-    "properties": {
-        "authorization": {
-            "type": "string",
-            "pattern": "Bearer "
+
+export const validator = (schema: any, dataSource?: ValidationDataSource) => {
+
+    return (request: Request, response: Response, next: NextFunction) => {
+
+        let validationDataSource;
+
+        switch (dataSource) {
+            case ValidationDataSource.Headers:
+                validationDataSource = request.headers;
+                break;
+            case ValidationDataSource.Body:
+            default:
+                validationDataSource = request.body;
+                break;
         }
-    },
-    "additionalProperties": true,
-    "required": [ "authorization" ]
-};
 
-export const authValidation = (request: Request, response: Response, next: NextFunction) => {
+        const validationResult = validate(schema, validationDataSource);
 
-    const validationResult = validator(schema, request.headers);
+        if (validationResult.valid) {
 
-    if (validationResult.valid) {
+            next();
+        } else {
 
-        next();
-    } else {
-
-        response.status(400).send(validationResult.errors);
-    }
+            response.status(400).send(validationResult.errors);
+        }
+    };
 };
 
 export const isAuthenticated = async (request: Request, response: Response, next: NextFunction) => {

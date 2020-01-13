@@ -12,6 +12,17 @@ export const addFight = async (data: any) => {
         ...fightSnapshot.data(),
         id: fightSnapshot.id
     };
+
+    // if (data.locations) {
+    //     // TODO: the problem is that you can't add an array like this, you need to add an object.
+    //     const fightLocationsRef: DocumentReference = await fightRef.collection('locations').add(data.locations);
+    //     const fightLocationsSnapshot: DocumentSnapshot = await fightLocationsRef.get();
+    //
+    //     addedFightData = {
+    //         ...addedFightData,
+    //         locations: fightLocationsSnapshot.data()
+    //     };
+    // }
 };
 
 export const getFights = async () => {
