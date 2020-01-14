@@ -5,6 +5,7 @@ import QuerySnapshot = FirebaseFirestore.QuerySnapshot;
 import {db} from '../../common/services/firebase.service';
 
 export const addFight = async (data: any) => {
+
     const fightRef: DocumentReference = await db.collection('fights').add(data);
     const fightSnapshot: DocumentSnapshot = await fightRef.get();
 
@@ -12,31 +13,9 @@ export const addFight = async (data: any) => {
         ...fightSnapshot.data(),
         id: fightSnapshot.id
     };
-
-    // if (data.locations) {
-    //     // TODO: the problem is that you can't add an array like this, you need to add an object.
-    //     const fightLocationsRef: DocumentReference = await fightRef.collection('locations').add(data.locations);
-    //     const fightLocationsSnapshot: DocumentSnapshot = await fightLocationsRef.get();
-    //
-    //     addedFightData = {
-    //         ...addedFightData,
-    //         locations: fightLocationsSnapshot.data()
-    //     };
-    // }
 };
 
 export const getFights = async () => {
-
-    //TODO: Remove this comment block later
-
-    // const innerFightRef: DocumentReference = await db.collection('fights').doc().collection('hjhjhjhjh').add({
-    //     name: 'something else',
-    //     code: 'SDF345'
-    // });
-    //
-    // const innerFightSnapshot: DocumentSnapshot = await innerFightRef.get();
-    //
-    // console.log(innerFightSnapshot.data());
 
     const fightsQuerySnapshot: QuerySnapshot = await db.collection('fights').get();
     return fightsQuerySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
