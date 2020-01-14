@@ -8,6 +8,8 @@ import {ValidationDataSource} from "../common/services/constants.service";
 
 export const fightsRoutesConfig = (app: Application) => {
     app.post('/fights', [
+        commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
+        commonMiddleware.isAuthenticated,
         commonMiddleware.validator(fightsSchemas.fight.full),
         fightsController.addFight
     ]);

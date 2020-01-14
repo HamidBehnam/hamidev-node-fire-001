@@ -4,7 +4,12 @@ import * as fightsModel from "../models/fights.model";
 export const addFight = async (request: Request, response: Response) => {
     try {
 
-        const fight = await fightsModel.addFight(request.body);
+        const fightData = {
+            ...request.body,
+            createdBy: response.locals.user.uid
+        };
+
+        const fight = await fightsModel.addFight(fightData);
         response.status(201).send(fight);
     } catch (error) {
 
