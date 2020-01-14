@@ -49,10 +49,19 @@ export const getFight = async (fightId: string) => {
 
     const fightSnapshot: DocumentSnapshot = await db.collection('fights').doc(fightId).get();
 
-    return fightSnapshot.exists ? {
-        ...fightSnapshot.data(),
-        id: fightSnapshot.id
-    } : null;
+    if (fightSnapshot.exists) {
+
+        return {
+            ...fightSnapshot.data(),
+            id: fightSnapshot.id
+        };
+    } else {
+
+        throw {
+            code: 'fights/fight-does-not-exist',
+            message: 'The requested fight does not exist.'
+        };
+    }
 };
 
 export const patchFight = async (fightId: string, fightData: any) => {
@@ -106,6 +115,59 @@ export const deleteFight = async (fightId: string) => {
         };
     } else {
 
-        return null;
+        throw {
+            code: 'fights/fight-does-not-exist',
+            message: 'The requested fight does not exist.'
+        };
+    }
+};
+
+export const addLocation = async (fightId: string, locationData: any) => {
+
+    const fightRef: DocumentReference = await db.collection('fights').doc(fightId);
+    const fightSnapshot: DocumentSnapshot = await fightRef.get();
+
+    if (fightSnapshot.exists) {
+        const locationRef: DocumentReference = await fightRef.collection('locations').add(locationData);
+        const locationSnapshot: DocumentSnapshot = await locationRef.get();
+
+        return {
+            ...locationSnapshot.data(),
+            id: locationSnapshot.id
+        };
+    } else {
+
+        throw {
+            code: 'fights/fight-does-not-exist',
+            message: 'The requested fight does not exist.'
+        };
+    }
+};
+
+export const getLocations = async (fightId: string) => {
+
+    const locationQuerySnapshot: QuerySnapshot = await db.collection('fights').doc(fightId).collection('locations').get();
+    return locationQuerySnapshot.docs.map((locationDocumentSnapshot: QueryDocumentSnapshot) => ({
+        ...locationDocumentSnapshot.data(),
+        id: locationDocumentSnapshot.id
+    }));
+};
+
+export const getLocation = async (fightId: string, locationId: string) => {
+
+    const locationSnapshot: DocumentSnapshot = await db.collection('fights').doc(fightId).collection('locations').doc(locationId).get();
+
+    if (locationSnapshot.exists) {
+
+        return {
+            ...locationSnapshot.data(),
+            id: locationSnapshot.id
+        };
+    } else {
+
+        throw {
+            code: 'fights/locations/location-does-not-exist',
+            message: 'The requested location does not exist.'
+        };
     }
 };

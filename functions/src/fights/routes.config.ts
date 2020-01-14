@@ -12,10 +12,6 @@ export const fightsRoutesConfig = (app: Application) => {
         fightsController.addFight
     ]);
 
-    app.post('/fights/:id/locations', [
-
-    ]);
-
     app.get('/fights', [
         commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
         fightsController.getFights
@@ -39,5 +35,18 @@ export const fightsRoutesConfig = (app: Application) => {
 
     app.delete('/fights/:id', [
         fightsController.deleteFight
+    ]);
+
+    app.post('/fights/:id/locations', [
+        commonMiddleware.validator(fightsSchemas.fightLocation.full),
+        fightsController.addLocation
+    ]);
+
+    app.get('/fights/:id/locations', [
+        fightsController.getLocations
+    ]);
+
+    app.get('/fights/:fightId/locations/:locationId', [
+        fightsController.getLocation
     ]);
 };
