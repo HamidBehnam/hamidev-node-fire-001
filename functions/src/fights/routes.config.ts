@@ -38,7 +38,7 @@ export const fightsRoutesConfig = (app: Application) => {
     ]);
 
     app.post('/fights/:id/locations', [
-        commonMiddleware.validator(fightsSchemas.fightLocation.full),
+        commonMiddleware.validator(fightsSchemas.location.full),
         fightsController.addLocation
     ]);
 
@@ -48,5 +48,14 @@ export const fightsRoutesConfig = (app: Application) => {
 
     app.get('/fights/:fightId/locations/:locationId', [
         fightsController.getLocation
+    ]);
+
+    app.patch('/fights/:fightId/locations/:locationId', [
+        commonMiddleware.validator(fightsSchemas.location.partial),
+        fightsController.patchLocation
+    ]);
+
+    app.delete('/fights/:fightId/locations/:locationId', [
+        fightsController.deleteLocation
     ]);
 };

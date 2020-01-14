@@ -99,3 +99,27 @@ export const getLocation = async (request: Request, response: Response) => {
         response.status(500).send(error)
     }
 };
+
+export const patchLocation = async (request: Request, response: Response) => {
+
+    try {
+
+        const updatedLocation = await fightsModel.patchLocation(request.params.fightId, request.params.locationId, request.body);
+        response.status(200).send(updatedLocation);
+    } catch (error) {
+
+        response.status(500).send(error);
+    }
+};
+
+export const deleteLocation = async (request: Request, response: Response) => {
+
+    try {
+
+        const deletedLocation = await fightsModel.deleteLocation(request.params.fightId, request.params.locationId);
+        response.status(201).send(deletedLocation);
+    } catch (error) {
+
+        response.status(500).send(error);
+    }
+};

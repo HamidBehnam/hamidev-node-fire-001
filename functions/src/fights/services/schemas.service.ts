@@ -19,7 +19,7 @@ export const fightsSchemas = {
             "minProperties": 1
         }
     },
-    "fightLocation": {
+    "location": {
         "full": {
             "properties": {
                 "name": { "type": "string" },

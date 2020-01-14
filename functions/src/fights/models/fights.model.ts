@@ -150,3 +150,36 @@ export const getLocation = async (fightId: string, locationId: string) => {
         };
     }
 };
+
+export const patchLocation = async (fightId: string, locationId: string, locationData: any) => {
+
+    const locationRef: DocumentReference = db.collection('fights').doc(fightId).collection('locations').doc(locationId);
+    await locationRef.update(locationData);
+
+    const locationSnapshot: DocumentSnapshot = await locationRef.get();
+
+    return {
+        ...locationSnapshot.data(),
+        id: locationSnapshot.id
+    };
+};
+
+export const deleteLocation = async (fightId: string, locationId: string) => {
+
+    const locationRef: DocumentReference = db.collection('fights').doc(fightId).collection('locations').doc(locationId);
+    const locationSnapshot: DocumentSnapshot = await locationRef.get();
+
+    if (locationSnapshot.exists) {
+
+        await locationRef.delete();
+        return {
+            id: locationId
+        };
+    } else {
+
+        throw {
+            code: 'fights/locations/location-does-not-exist',
+            message: 'The requested location does not exist.'
+        };
+    }
+};
