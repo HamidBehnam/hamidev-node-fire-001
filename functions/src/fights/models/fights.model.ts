@@ -15,25 +15,36 @@ export const addFight = async (data: any) => {
     };
 };
 
-export const getFights = async () => {
+export const getFights = async (userId: string) => {
 
-    const fightsQuerySnapshot: QuerySnapshot = await db.collection('fights').get();
+    const fightsQuerySnapshot: QuerySnapshot = await db.collection('fights').where('createdBy', '==', userId).get();
     return fightsQuerySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
         ...doc.data(),
         id: doc.id
     }));
 };
 
-export const getFight = async (fightId: string) => {
+export const getFight = async (userId: string, fightId: string) => {
 
     const fightSnapshot: DocumentSnapshot = await db.collection('fights').doc(fightId).get();
 
     if (fightSnapshot.exists) {
 
-        return {
-            ...fightSnapshot.data(),
-            id: fightSnapshot.id
-        };
+        const fightData = fightSnapshot.data();
+
+        if (fightData && fightData.createdBy === userId) {
+
+            return {
+                ...fightData,
+                id: fightSnapshot.id
+            };
+        } else {
+
+            throw {
+                code: 'fights/fight-permission',
+                message: `you don't have enough permission to load this document.`
+            };
+        }
     } else {
 
         throw {

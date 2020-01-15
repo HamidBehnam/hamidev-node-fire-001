@@ -20,7 +20,7 @@ export const addFight = async (request: Request, response: Response) => {
 export const getFights = async (request: Request, response: Response) => {
     try {
 
-        const fights = await fightsModel.getFights();
+        const fights = await fightsModel.getFights(response.locals.user.uid);
         response.status(200).send(fights);
     } catch (error) {
 
@@ -31,7 +31,7 @@ export const getFights = async (request: Request, response: Response) => {
 export const getFight = async (request: Request, response: Response) => {
     try {
 
-        const fight = await fightsModel.getFight(request.params.id);
+        const fight = await fightsModel.getFight(response.locals.user.uid, request.params.id);
         response.status(200).send(fight);
     } catch (error) {
 

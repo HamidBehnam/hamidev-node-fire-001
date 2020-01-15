@@ -16,12 +16,13 @@ export const fightsRoutesConfig = (app: Application) => {
 
     app.get('/fights', [
         commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
+        commonMiddleware.isAuthenticated,
         fightsController.getFights
     ]);
 
     app.get('/fights/:id', [
-        // commonMiddleware.validator(commonSchemas.auth),
-        // commonMiddleware.isAuthenticated,
+        commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
+        commonMiddleware.isAuthenticated,
         fightsController.getFight
     ]);
 
