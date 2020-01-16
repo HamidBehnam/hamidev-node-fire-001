@@ -11,6 +11,7 @@ export const usersSchemas = {
         "properties": {
             "uid": { "type": "string" },
             "access": {
+                "type": "object",
                 "properties": {
                     "admin": { "type": "boolean" },
                 },

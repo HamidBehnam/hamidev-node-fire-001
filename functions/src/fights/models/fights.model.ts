@@ -41,6 +41,7 @@ export const getFight = async (userId: string, fightId: string) => {
         } else {
 
             throw {
+                status: 401,
                 code: 'fights/fight-permission',
                 message: `you don't have enough permission to load this document.`
             };
@@ -48,6 +49,7 @@ export const getFight = async (userId: string, fightId: string) => {
     } else {
 
         throw {
+            status: 404,
             code: 'fights/fight-does-not-exist',
             message: 'The requested fight does not exist.'
         };
@@ -86,6 +88,7 @@ export const putFight = async (fightId: string, fightData: any) => {
     } else {
 
         throw {
+            status: 404,
             code: 'fights/fight-does-not-exist',
             message: 'The requested fight does not exist.'
         };
@@ -106,6 +109,7 @@ export const deleteFight = async (fightId: string) => {
     } else {
 
         throw {
+            status: 404,
             code: 'fights/fight-does-not-exist',
             message: 'The requested fight does not exist.'
         };
@@ -128,6 +132,7 @@ export const addLocation = async (fightId: string, locationData: any) => {
     } else {
 
         throw {
+            status: 404,
             code: 'fights/fight-does-not-exist',
             message: 'The requested fight does not exist.'
         };
@@ -156,6 +161,7 @@ export const getLocation = async (fightId: string, locationId: string) => {
     } else {
 
         throw {
+            status: 404,
             code: 'fights/locations/location-does-not-exist',
             message: 'The requested location does not exist.'
         };
@@ -189,6 +195,7 @@ export const deleteLocation = async (fightId: string, locationId: string) => {
     } else {
 
         throw {
+            status: 404,
             code: 'fights/locations/location-does-not-exist',
             message: 'The requested location does not exist.'
         };

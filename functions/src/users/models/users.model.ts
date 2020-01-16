@@ -33,6 +33,7 @@ export const signIn = (data: any) => {
         } else {
 
             throw {
+                status: 404,
                 code: 'auth/user-not-defined',
                 message: 'User is not defined.'
             };
@@ -53,6 +54,7 @@ export const access = (currentUser: DecodedIdToken, claimData: any) => {
     } else {
 
         throw {
+            status: 403,
             code: 'access/cannot-change-access',
             message: `Potential reason: - trying to change your own access.`
         };

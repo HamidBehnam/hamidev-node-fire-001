@@ -8,7 +8,7 @@ export const createUser = async (request: Request, response: Response) => {
         response.status(201).send(user);
     } catch (error) {
 
-        response.status(500).send(error);
+        response.status(error.status || 500).send(error);
     }
 };
 
@@ -19,7 +19,7 @@ export const listUsers = async (request: Request, response: Response) => {
         response.status(200).send(users);
     } catch (error) {
 
-        response.status(500).send(error);
+        response.status(error.status || 500).send(error);
     }
 };
 
@@ -31,7 +31,7 @@ export const signIn = async (request: Request, response: Response) => {
         response.status(200).send(authenticationResult);
     } catch (error) {
 
-        response.status(500).send(error);
+        response.status(error.status || 500).send(error);
     }
 };
 
@@ -43,7 +43,7 @@ export const signOut = async (request: Request, response: Response) => {
         response.status(201).send();
     } catch (error) {
 
-        response.status(500).send(error);
+        response.status(error.status || 500).send(error);
     }
 };
 
@@ -58,6 +58,6 @@ export const access = async (request: Request, response: Response) => {
         response.status(201).send();
     } catch (error) {
 
-        response.status(500).send(error);
+        response.status(error.status || 500).send(error);
     }
 };
