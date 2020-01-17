@@ -8,7 +8,7 @@ import {ValidationDataSource} from "../common/services/constants.service";
 export const usersRoutesConfig = (app: Application) => {
     //TODO: while the app is in development process, it's ok to have an endpoint to create the users through the
     // NodeJs server like this, to be able to implement and test the authentication/authorization features,
-    // but eventually it makes sense to do all the authentication related works such as sign up, sign in,
+    // but eventually it makes sense to do all the user related works such as sign up, sign in,
     // sign out, sending verification emails, changing passwords, signing in through providers (google, twitter, ...),
     // in the front ent.
     app.post('/users', [
