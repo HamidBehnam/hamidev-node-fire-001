@@ -51,7 +51,7 @@ export const isAuthenticated = async (request: Request, response: Response, next
     }
 };
 
-export const isAuthorized = (acceptedRoles: string[]) => {
+export const resourceLevelAuthorization = (acceptedRoles: string[]) => {
     return (request: Request, response: Response, next: NextFunction) => {
 
         let authorized = false;

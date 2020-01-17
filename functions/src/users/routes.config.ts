@@ -31,7 +31,7 @@ export const usersRoutesConfig = (app: Application) => {
         commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
         commonMiddleware.isAuthenticated,
         commonMiddleware.validator(usersSchemas.access),
-        commonMiddleware.isAuthorized(['admin']),
+        commonMiddleware.resourceLevelAuthorization(['admin']),
         usersController.access
     ]);
 };

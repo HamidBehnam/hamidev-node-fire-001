@@ -3,6 +3,8 @@ import DocumentSnapshot = FirebaseFirestore.DocumentSnapshot;
 import QueryDocumentSnapshot = FirebaseFirestore.QueryDocumentSnapshot;
 import QuerySnapshot = FirebaseFirestore.QuerySnapshot;
 import {db} from '../../common/services/firebase.service';
+import {Role} from "../../common/services/constants.service";
+import {documentLevelAuthorization} from "../../common/services/authorization.service";
 
 export const addFight = async (data: any) => {
 
@@ -30,9 +32,11 @@ export const getFight = async (userId: string, fightId: string) => {
 
     if (fightSnapshot.exists) {
 
+        const role: Role = await documentLevelAuthorization(userId, 'permissions', fightSnapshot);
+
         const fightData = fightSnapshot.data();
 
-        if (fightData && fightData.createdBy === userId) {
+        if (role > Role.Guest) {
 
             return {
                 ...fightData,
@@ -42,16 +46,14 @@ export const getFight = async (userId: string, fightId: string) => {
 
             throw {
                 status: 401,
-                code: 'fights/fight-permission',
-                message: `you don't have enough permission to load this document.`
+                message: `Not Authorized!`
             };
         }
     } else {
 
         throw {
             status: 404,
-            code: 'fights/fight-does-not-exist',
-            message: 'The requested fight does not exist.'
+            message: 'Not Found!'
         };
     }
 };
@@ -89,7 +91,6 @@ export const putFight = async (fightId: string, fightData: any) => {
 
         throw {
             status: 404,
-            code: 'fights/fight-does-not-exist',
             message: 'The requested fight does not exist.'
         };
     }
@@ -110,8 +111,42 @@ export const deleteFight = async (fightId: string) => {
 
         throw {
             status: 404,
-            code: 'fights/fight-does-not-exist',
             message: 'The requested fight does not exist.'
+        };
+    }
+};
+
+export const addPermission = async (userId: string, fightId: string, permissionData: any) => {
+
+    const fightRef: DocumentReference = db.collection('fights').doc(fightId);
+    const fightSnapshot: DocumentSnapshot = await fightRef.get();
+
+    if (fightSnapshot.exists) {
+
+        const fightData = fightSnapshot.data();
+
+        if (fightData && fightData.createdBy === userId) {
+
+            const permissionRef: DocumentReference = fightRef.collection('permissions').doc(permissionData.uid);
+            await permissionRef.set(permissionData.permission);
+            const permissionSnapshot: DocumentSnapshot = await permissionRef.get();
+
+            return {
+                ...permissionSnapshot.data(),
+                id: permissionSnapshot.id
+            };
+        } else {
+
+            throw {
+                status: 401,
+                message: 'Not authorized!'
+            };
+        }
+    } else {
+
+        throw {
+            status: 404,
+            message: 'Not Found!'
         };
     }
 };
@@ -133,7 +168,6 @@ export const addLocation = async (fightId: string, locationData: any) => {
 
         throw {
             status: 404,
-            code: 'fights/fight-does-not-exist',
             message: 'The requested fight does not exist.'
         };
     }
@@ -162,7 +196,6 @@ export const getLocation = async (fightId: string, locationId: string) => {
 
         throw {
             status: 404,
-            code: 'fights/locations/location-does-not-exist',
             message: 'The requested location does not exist.'
         };
     }
@@ -196,7 +229,6 @@ export const deleteLocation = async (fightId: string, locationId: string) => {
 
         throw {
             status: 404,
-            code: 'fights/locations/location-does-not-exist',
             message: 'The requested location does not exist.'
         };
     }

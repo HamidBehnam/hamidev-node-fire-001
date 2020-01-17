@@ -40,6 +40,13 @@ export const fightsRoutesConfig = (app: Application) => {
         fightsController.deleteFight
     ]);
 
+    app.post('/fights/:id/permissions', [
+        commonMiddleware.validator(commonSchemas.auth, ValidationDataSource.Headers),
+        commonMiddleware.isAuthenticated,
+        commonMiddleware.validator(fightsSchemas.permission),
+        fightsController.addPermission
+    ]);
+
     app.post('/fights/:id/locations', [
         commonMiddleware.validator(fightsSchemas.location.full),
         fightsController.addLocation

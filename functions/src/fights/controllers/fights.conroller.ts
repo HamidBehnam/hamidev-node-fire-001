@@ -72,6 +72,17 @@ export const deleteFight = async (request: Request, response: Response) => {
     }
 };
 
+export const addPermission = async (request: Request, response: Response) => {
+    try {
+
+        const permission = await fightsModel.addPermission(response.locals.user.uid, request.params.id, request.body);
+        response.status(200).send(permission);
+    } catch (error) {
+
+        response.status(error.status || 500).send(error);
+    }
+};
+
 export const addLocation = async (request: Request, response: Response) => {
     try {
 
