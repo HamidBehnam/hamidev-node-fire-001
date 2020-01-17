@@ -32,6 +32,8 @@ export const getFight = async (userId: string, fightId: string) => {
 
     if (fightSnapshot.exists) {
 
+        //TODO: documentLevelAuthorization is not used for all the paths and resources, it's only used here as a sample.
+        // the same approach can be used for other paths and resources like getLocations, ...
         const role: Role = await documentLevelAuthorization(userId, 'permissions', fightSnapshot);
 
         const fightData = fightSnapshot.data();
@@ -125,6 +127,8 @@ export const addPermission = async (userId: string, fightId: string, permissionD
 
         const fightData = fightSnapshot.data();
 
+        //TODO: currently only the creator of the document can set the permission for the document, but later I can use
+        // documentLevelAuthorization to find out what the user's Role is and let the permission be set by Creator "or" the Owners.
         if (fightData && fightData.createdBy === userId) {
 
             const permissionRef: DocumentReference = fightRef.collection('permissions').doc(permissionData.uid);
@@ -153,7 +157,7 @@ export const addPermission = async (userId: string, fightId: string, permissionD
 
 export const addLocation = async (fightId: string, locationData: any) => {
 
-    const fightRef: DocumentReference = await db.collection('fights').doc(fightId);
+    const fightRef: DocumentReference = db.collection('fights').doc(fightId);
     const fightSnapshot: DocumentSnapshot = await fightRef.get();
 
     if (fightSnapshot.exists) {
