@@ -2,7 +2,7 @@ import * as firebaseAdmin from 'firebase-admin';
 import * as firebaseClient from "firebase";
 import AdminAuth = firebaseAdmin.auth.Auth;
 import ClientAuth = firebaseClient.auth.Auth;
-import Firestore = FirebaseFirestore.Firestore;
+import Firestore = firebaseAdmin.firestore.Firestore;
 
 const firebaseClientConfig = {
     apiKey: "AIzaSyDhUFOOiURSqogYhwZkvK867YNTcY10D2w",

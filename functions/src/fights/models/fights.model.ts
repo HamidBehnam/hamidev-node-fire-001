@@ -1,7 +1,8 @@
-import DocumentReference = FirebaseFirestore.DocumentReference;
-import DocumentSnapshot = FirebaseFirestore.DocumentSnapshot;
-import QueryDocumentSnapshot = FirebaseFirestore.QueryDocumentSnapshot;
-import QuerySnapshot = FirebaseFirestore.QuerySnapshot;
+import * as firebaseAdmin from 'firebase-admin';
+import DocumentReference = firebaseAdmin.firestore.DocumentReference;
+import DocumentSnapshot = firebaseAdmin.firestore.DocumentSnapshot;
+import QueryDocumentSnapshot = firebaseAdmin.firestore.QueryDocumentSnapshot;
+import QuerySnapshot = firebaseAdmin.firestore.QuerySnapshot;
 import {db} from '../../common/services/firebase.service';
 import {Role} from "../../common/services/constants.service";
 import {documentLevelAuthorization} from "../../common/services/authorization.service";

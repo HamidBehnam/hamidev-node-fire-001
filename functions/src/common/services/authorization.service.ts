@@ -1,6 +1,7 @@
 import {Role} from "./constants.service";
-import DocumentSnapshot = FirebaseFirestore.DocumentSnapshot;
-import DocumentReference = FirebaseFirestore.DocumentReference;
+import * as firebaseAdmin from 'firebase-admin';
+import DocumentSnapshot = firebaseAdmin.firestore.DocumentSnapshot;
+import DocumentReference = firebaseAdmin.firestore.DocumentReference;
 
 export const documentLevelAuthorization = async (userId: string, permissionCollection: string, documentSnapshot: DocumentSnapshot): Promise<Role> => {
 

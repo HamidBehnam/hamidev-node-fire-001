@@ -1,8 +1,12 @@
 import {Request, Response} from "firebase-functions";
 import {NextFunction} from "express";
 import {validate} from "../services/validate.service";
-import {adminAuth} from "../services/firebase.service";
+import {adminAuth, db} from "../services/firebase.service";
 import {ValidationDataSource} from "../services/constants.service";
+import * as firebaseAdmin from "firebase-admin";
+import DocumentReference = firebaseAdmin.firestore.DocumentReference;
+import FieldValue = firebaseAdmin.firestore.FieldValue;
+import DocumentSnapshot = firebaseAdmin.firestore.DocumentSnapshot;
 
 
 export const validator = (schema: any, dataSource?: ValidationDataSource) => {
@@ -42,6 +46,22 @@ export const isAuthenticated = async (request: Request, response: Response, next
         try {
 
             response.locals.user = await adminAuth.verifyIdToken(token, true);
+
+            const userLastActivityRef: DocumentReference = db.collection('last-activities').doc(response.locals.user.uid);
+            const userLastActivitySnapshot: DocumentSnapshot = await userLastActivityRef.get();
+
+            if (userLastActivitySnapshot.exists) {
+                const lastActivityData = userLastActivitySnapshot.data();
+
+                if (lastActivityData) {
+
+                    console.log(lastActivityData.lastRequest);
+                }
+            } else {
+                await userLastActivityRef.set({
+                    lastRequest: FieldValue.serverTimestamp()
+                });
+            }
 
             next();
         } catch (error) {
