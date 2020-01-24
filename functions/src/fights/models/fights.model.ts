@@ -20,11 +20,44 @@ export const addFight = async (data: any) => {
 
 export const getFights = async (userId: string) => {
 
-    const fightsQuerySnapshot: QuerySnapshot = await db.collection('fights').where('createdBy', '==', userId).get();
-    return fightsQuerySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
+    const fightsQuerySnapshot: QuerySnapshot = await db.collection('fights')
+        .where('createdBy', '==', userId)
+        .get();
+
+    const fights = fightsQuerySnapshot.docs.map((doc: QueryDocumentSnapshot) => ({
         ...doc.data(),
         id: doc.id
     }));
+
+    const sharedFightsQuerySnapshot: QuerySnapshot = await db.collectionGroup('permissions')
+        .where('id', '==', userId)
+        .where('role', '>', Role.Guest)
+        .get();
+
+    const sharedFights: any[] = [];
+
+    for (const queryDocumentSnapshot of sharedFightsQuerySnapshot.docs) {
+
+        const documentRef: DocumentReference | null = queryDocumentSnapshot.ref.parent.parent;
+
+        if (documentRef) {
+
+            const documentSnapshot = await documentRef.get();
+
+            if (documentSnapshot.exists) {
+
+                sharedFights.push({
+                    ...documentSnapshot.data(),
+                    id: documentRef.id
+                });
+            }
+        }
+    }
+
+    return [
+        ...fights,
+        ...sharedFights
+    ];
 };
 
 export const getFight = async (userId: string, fightId: string) => {
@@ -132,8 +165,8 @@ export const addPermission = async (userId: string, fightId: string, permissionD
         // documentLevelAuthorization to find out what the user's Role is and let the permission be set by Creator "or" the Owners.
         if (fightData && fightData.createdBy === userId) {
 
-            const permissionRef: DocumentReference = fightRef.collection('permissions').doc(permissionData.uid);
-            await permissionRef.set(permissionData.permission);
+            const permissionRef: DocumentReference = fightRef.collection('permissions').doc(permissionData.id);
+            await permissionRef.set(permissionData);
             const permissionSnapshot: DocumentSnapshot = await permissionRef.get();
 
             return {

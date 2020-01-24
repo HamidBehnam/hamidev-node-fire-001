@@ -39,17 +39,10 @@ export const fightsSchemas = {
     },
     "permission": {
         "properties": {
-            "uid": { "type": "string" },
-            "permission": {
-                "type": "object",
-                "properties": {
-                    "role": { "enum": [2000, 3000, 4000] }
-                },
-                "additionalProperties": false,
-                "required": [ "role" ]
-            },
+            "id": { "type": "string" },
+            "role": { "enum": [2000, 3000, 4000] }
         },
         "additionalProperties": false,
-        "required": [ "uid", "permission" ]
+        "required": [ "id", "role" ]
     }
 };
